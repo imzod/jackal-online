@@ -1,0 +1,80 @@
+body {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin: auto;
+    align-items: center;
+}
+.game-field {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    filter: drop-shadow(0px 4px 20px rgba(44, 57, 121, 0.09));
+    gap: 4px;
+    justify-content: center;
+}
+
+.game-field_cell {
+    background: #FFFFFF;
+    border-radius: 12px;
+    height: 150px;
+    width: 150px;
+    padding: 10px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row;
+}
+.btn, .reset-button, .undo-button {
+    padding: 12px 20px;
+    background: #F7F7F7;
+    border-radius: 12px;
+    margin-top: 10px;
+}
+
+
+.winPosition {
+    background: #84ff00;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 15px auto;
+    text-align: center;
+    text-decoration: none;
+    color: black;
+}
+
+.game-status {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 5px auto;
+    text-align: center;
+}
+
+
+.enter-players {
+    text-align: center;
+}
+
+.input-field {
+    border-radius: 10px;
+    border: 1px solid #000;
+    padding: 4px 8px;
+    margin: 0 0 10px 4px;
+    font-size: 18px;
+}
+
+@media (max-width: 600px) {
+    .game-field_cell {
+        height: 100px;
+        width: 100px;
+    }
+}
+
+.error {
+    color: red;
+    text-align: center;
+}

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>TicTacToe</title>
+    <link rel="stylesheet" href="/stylesheets/home.css">
+</head>
+<body>
+<div class="title">Крестики нолики</div>
+<div class="enter-players ">
+
+    <form id="player-form" action="/game" method="POST">
+        <div>
+            <label for="player1">Игрок 1</label>
+            <input type="text" placeholder="Введите имя" name="player1" id="player1" class="input-field"/>
+        </div>
+        <div>
+            <label for="player2">Игрок 2</label>
+            <input type="text" placeholder="Введите имя" name="player2" id="player2" class="input-field"/>
+        </div>
+
+        <input type="submit" class="btn" value="Начать игру"/>
+    </form>
+</div>
+<script type="text/javascript">
+    document.getElementById('player1').value = localStorage.getItem('player1');
+    document.getElementById('player2').value = localStorage.getItem('player2');
+    document.getElementById('player-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        let player1 = document.getElementById('player1').value;
+        let player2 = document.getElementById('player2').value;
+        if (player1 === '' || player2 === '') {
+            alert('Введите имя игроков');
+            return;
+        }
+
+        localStorage.setItem('player1', player1);
+        localStorage.setItem('player2', player2);
+
+        this.submit();
+    });
+</script>
+</body>
+</html>
