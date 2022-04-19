@@ -1,6 +1,6 @@
-/*
 class JackalGame {
     field = [
+        [null, null, null, null, null, null, null, null, null],
         [null, null, null, null, null, null, null, null, null, null, null],
         [null, null, null, null, null, null, null, null, null, null, null],
         [null, null, null, null, null, null, null, null, null, null, null],
@@ -10,8 +10,7 @@ class JackalGame {
         [null, null, null, null, null, null, null, null, null, null, null],
         [null, null, null, null, null, null, null, null, null, null, null],
         [null, null, null, null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null, null],
     ];
     cards = {
         empty1: 10,
@@ -44,7 +43,7 @@ class JackalGame {
         safeZone: 2,
         resurrection: 1,
         airplane: 1,
-        dead: 5
+        dead: 1
     }
 
     getRandomNum(min, max) {
@@ -54,18 +53,35 @@ class JackalGame {
 
     feee() {
         for (let i = 0; i < this.field.length; i++) {
-            for (let j = 0; j < this.field[i].length; j++) {
-                const randomNum = this.getRandomNum(0, Object.keys(this.cards).length);
+            for (let j = 0; j < (this.field)[i].length; j++) {
+                const randomNum = rando(0, Object.keys(this.cards).length - 1);
                 let key = Object.keys(this.cards)[randomNum];
-                if (this.cards[key] !== 0) {
-                    this.field[i][j] = key;
-                    this.cards[key] -= 1;
+                if ((this.cards)[key] !== 0) {
+                    (this.field)[i][j] = key;
+                    (this.cards)[key] -= 1;
                 } else {
                     j--;
                     console.log('aaaaaaaaaa')
                 }
 
             }
+        }
+    }
+
+    randKey() {
+        for (let i = 0; i < 116; i++) {
+
+            const randomNum = rando(0, Object.keys(this.cards).length - 1);
+            let key = Object.keys(this.cards)[randomNum];
+            if ((this.cards)[key] !== 0) {
+                (this.cards)[key] -= 1;
+                Object.keys(this.cards)[key]
+            } else {
+                i--;
+                console.log('aaaaaaaaaa')
+            }
+
+
         }
     }
 
@@ -78,7 +94,7 @@ class JackalGame {
         ];
     }
 
-    checkIsWin(playerIdx) {
+    /*checkIsWin(playerIdx) {
         for (const winPosition of TicTacToe.winPositions) {
             let isWin = true;
 
@@ -111,24 +127,28 @@ class JackalGame {
 
     getPlayer(playerIdx) {
         return this.players[playerIdx];
-    }
+    }*/
+
 }
 
 const isPlayerOneFirst = true;
 const playerOne = {name: "Andrey"};
 const playerTwo = {name: "Ruslan"};
 
-let game = isPlayerOneFirst ? new TicTacToe(playerOne, playerTwo) : new TicTacToe(playerTwo, playerOne);
-let gameTurns = [];
-const cells = document.querySelectorAll(".game-field_cell");
-const cross = document.querySelector("#cross");
-const circle = document.querySelector("#circle");
+let game = isPlayerOneFirst ? new JackalGame(playerOne, playerTwo) : new JackalGame(playerTwo, playerOne);
+game.feee();
+
+const cells = document.querySelectorAll(".cell");
+const cellsImg = document.querySelectorAll("img");
+/*const cross = document.querySelector("#cross");
+const circle = document.querySelector("#circle");*/
 let flag = 0;
-let isOver = false;
+/*
+let isOver = false;*/
 
 
 let myCells = Array.from(cells)
-const resetButton = document.querySelector("input.reset-button");
+/*const resetButton = document.querySelector("input.reset-button");
 const undoButton = document.querySelector("input.undo-button");
 const gameStatus = document.querySelector("#gameStatus");
 const playersNames = document.querySelector("#player-form");
@@ -197,32 +217,37 @@ function undo() {
     }
     gameStatus.innerHTML = "";
     status();
-}
-
+}*/
+let newArray = game.field.flat()
 
 for (let cell of myCells) {
     cell.onclick = () => {
-        if (isOver) {
-            return;
-        }
         try {
-            gameTurns.push(myCells.indexOf(cell))
-
-            game.makeMove((flag + 1) % 2, myCells.indexOf(cell));
             flag++;
-
             if (flag % 2) {
-                cell.innerHTML = cross.outerHTML;
+                cell.innerHTML = "";
+                const newImg = document.createElement('img');
+                newImg.classList.add("img-fluid", "border", "border-dark");
+                newImg.src = `/imgs/${newArray[myCells.indexOf(cell)]}.jpg`
+                cell.append(newImg);
+                console.log(newArray[myCells.indexOf(cell)]);
             } else {
-                cell.innerHTML = circle.outerHTML;
+                cell.innerHTML = "";
+                const newImg = document.createElement('img');
+                newImg.classList.add("img-fluid", "border", "border-dark");
+                newImg.src = `/imgs/${newArray[myCells.indexOf(cell)]}.jpg`
+                cell.append(newImg);
+                console.log();
+
             }
-            status();
+
+            /*status();
             if (game.checkIsWin(flag % 2)) {
                 const winner = game.getPlayer((flag + 1) % 2).info === playerOne ? playerOne.name : playerTwo.name;
                 console.log(`Player ${winner} win`);
                 isOver = true;
             }
-
+*/
 
         } catch
             (exc) {
@@ -235,7 +260,8 @@ for (let cell of myCells) {
 
     }
 }
-*/
+/*
+
 let field = [
     [null, null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null, null, null, null],
@@ -302,4 +328,4 @@ function getRandomNum(min, max) {
 
         }
     }
-console.log (field);
+console.log (field);*/
