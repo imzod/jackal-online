@@ -3,7 +3,7 @@ const ejsMate = require('ejs-mate');
 const path = require("path");
 const ExpressError = require("./utils/ExpressError");
 const bodyParser = require("body-parser");
-
+const {rando, randoSequence} = require('@nastyox/rando.js');
 
 const app = express();
 
@@ -16,7 +16,7 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
-    res.render('game');
+    res.render('game', {rando});
 });
 
 

@@ -1,22 +1,74 @@
 /*
-0 | 1 | 2
---+---+--
-3 | 4 | 5
---+---+--
-6 | 7 | 8
-*/
-class TicTacToe {
-    static winPositions = [
-        [0, 1, 2],
-        [3, 4, 5],
-        [6, 7, 8],
-        [0, 3, 6],
-        [1, 4, 7],
-        [2, 5, 8],
-        [0, 4, 8],
-        [2, 4, 6]
+class JackalGame {
+    field = [
+        [null, null, null, null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null, null, null, null],
     ];
-    field = [null, null, null, null, null, null, null, null, null];
+    cards = {
+        empty1: 10,
+        empty2: 10,
+        empty3: 10,
+        empty4: 10,
+        double: 6,
+        arrow1sideStraightRight: 3,
+        arrow1sideRightUp: 3,
+        arrow1sideLeftRight: 3,
+        arrow2sidesDiagonal: 3,
+        arrow3sides: 3,
+        arrow4sidesLeftRight: 3,
+        arrow4sidesDiagonal: 3,
+        trap: 3,
+        trap2: 5,
+        trap3: 4,
+        trap4: 2,
+        trap5: 1,
+        rum: 4,
+        animal: 4,
+        parachute: 2,
+        canon: 2,
+        gold1: 5,
+        gold2: 5,
+        gold3: 3,
+        gold4: 2,
+        gold5: 1,
+        horse: 2,
+        safeZone: 2,
+        resurrection: 1,
+        airplane: 1,
+        dead: 5
+    }
+
+    getRandomNum(min, max) {
+        return Math.floor(Math.random() * (max - min) + min);
+    }
+
+
+    feee() {
+        for (let i = 0; i < this.field.length; i++) {
+            for (let j = 0; j < this.field[i].length; j++) {
+                const randomNum = this.getRandomNum(0, Object.keys(this.cards).length);
+                let key = Object.keys(this.cards)[randomNum];
+                if (this.cards[key] !== 0) {
+                    this.field[i][j] = key;
+                    this.cards[key] -= 1;
+                } else {
+                    j--;
+                    console.log('aaaaaaaaaa')
+                }
+
+            }
+        }
+    }
+
     players = [];
 
     constructor(playerOneInfo, playerTwoInfo) {
@@ -43,15 +95,6 @@ class TicTacToe {
             }
         }
         return false;
-    }
-
-    checkIsDraw() {
-        for (const cell of this.field) {
-            if (cell === null) {
-                return false;
-            }
-        }
-        return true;
     }
 
     makeMove(playerIdx, position) {
@@ -192,5 +235,71 @@ for (let cell of myCells) {
 
     }
 }
+*/
+let field = [
+    [null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null],
+];
+let cards = {
+    empty1: 10,
+    empty2: 10,
+    empty3: 10,
+    empty4: 10,
+    double: 6,
+    arrow1sideStraightRight: 3,
+    arrow1sideRightUp: 3,
+    arrow1sideLeftRight: 3,
+    arrow2sidesDiagonal: 3,
+    arrow3sides: 3,
+    arrow4sidesLeftRight: 3,
+    arrow4sidesDiagonal: 3,
+    trap: 3,
+    trap2: 5,
+    trap3: 4,
+    trap4: 2,
+    trap5: 1,
+    rum: 4,
+    animal: 4,
+    parachute: 2,
+    canon: 2,
+    gold1: 5,
+    gold2: 5,
+    gold3: 3,
+    gold4: 2,
+    gold5: 1,
+    horse: 2,
+    safeZone: 2,
+    resurrection: 1,
+    airplane: 1,
+    dead: 1
+}
+
+function getRandomNum(min, max) {
+    return Math.floor(Math.random() * (max - min) + min);
+}
 
 
+    for (let i = 0; i < field.length; i++) {
+        for (let j = 0; j < field[i].length; j++) {
+            const randomNum = rando(0, Object.keys(cards).length-1);
+            let key = Object.keys(cards)[randomNum];
+            if (cards[key] !== 0) {
+                field[i][j] = key;
+                cards[key] -= 1;
+            } else {
+                j--;
+                console.log('aaaaaaaaaa')
+            }
+
+        }
+    }
+console.log (field);
