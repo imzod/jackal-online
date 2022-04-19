@@ -227,14 +227,14 @@ for (let cell of myCells) {
             if (flag % 2) {
                 cell.innerHTML = "";
                 const newImg = document.createElement('img');
-                newImg.classList.add("img-fluid", "border", "border-dark");
+                newImg.classList.add("img-fluid");
                 newImg.src = `/imgs/${newArray[myCells.indexOf(cell)]}.jpg`
                 cell.append(newImg);
                 console.log(newArray[myCells.indexOf(cell)]);
             } else {
                 cell.innerHTML = "";
                 const newImg = document.createElement('img');
-                newImg.classList.add("img-fluid", "border", "border-dark");
+                newImg.classList.add("img-fluid");
                 newImg.src = `/imgs/${newArray[myCells.indexOf(cell)]}.jpg`
                 cell.append(newImg);
                 console.log();
