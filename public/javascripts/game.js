@@ -1,16 +1,18 @@
 class JackalGame {
     field = [
-        [null, null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null, null, null],
+        ['sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea'],
+        ['sea', 'sea', null, null, null, null, null, null, null, null, null, 'sea', 'sea'],
+        ['sea', null, null, null, null, null, null, null, null, null, null, null, 'sea'],
+        ['sea', null, null, null, null, null, null, null, null, null, null, null, 'sea'],
+        ['sea', null, null, null, null, null, null, null, null, null, null, null, 'sea'],
+        ['sea', null, null, null, null, null, null, null, null, null, null, null, 'sea'],
+        ['sea', null, null, null, null, null, null, null, null, null, null, null, 'sea'],
+        ['sea', null, null, null, null, null, null, null, null, null, null, null, 'sea'],
+        ['sea', null, null, null, null, null, null, null, null, null, null, null, 'sea'],
+        ['sea', null, null, null, null, null, null, null, null, null, null, null, 'sea'],
+        ['sea', null, null, null, null, null, null, null, null, null, null, null, 'sea'],
+        ['sea', 'sea', null, null, null, null, null, null, null, null, null, 'sea', 'sea'],
+        ['sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea']
     ];
     cards = {
         empty1: 10,
@@ -43,47 +45,35 @@ class JackalGame {
         safeZone: 2,
         resurrection: 1,
         airplane: 1,
-        dead: 1
+        dead: 1,
+        sea: 0
     }
 
     getRandomNum(min, max) {
         return Math.floor(Math.random() * (max - min) + min);
     }
 
+    newArray = this.field.flat()
 
     feee() {
         for (let i = 0; i < this.field.length; i++) {
             for (let j = 0; j < (this.field)[i].length; j++) {
                 const randomNum = rando(0, Object.keys(this.cards).length - 1);
                 let key = Object.keys(this.cards)[randomNum];
-                if ((this.cards)[key] !== 0) {
-                    (this.field)[i][j] = key;
-                    (this.cards)[key] -= 1;
-                } else {
-                    j--;
-                    console.log('aaaaaaaaaa')
+                if (this.field[i][j] !== 'sea') {
+                    if ((this.cards)[key] !== 0) {
+                        (this.field)[i][j] = key;
+                        (this.cards)[key] -= 1;
+
+                    } else {
+                        j--;
+                        console.log('aaaaaaaaaa')
+                    }
                 }
-
             }
         }
     }
 
-    randKey() {
-        for (let i = 0; i < 116; i++) {
-
-            const randomNum = rando(0, Object.keys(this.cards).length - 1);
-            let key = Object.keys(this.cards)[randomNum];
-            if ((this.cards)[key] !== 0) {
-                (this.cards)[key] -= 1;
-                Object.keys(this.cards)[key]
-            } else {
-                i--;
-                console.log('aaaaaaaaaa')
-            }
-
-
-        }
-    }
 
     players = [];
 
@@ -120,14 +110,14 @@ class JackalGame {
 
         this.field[position] = this.players[playerIdx].symbol;
     }
-
+*/
     isPossibleMove(position) {
         return position < this.field.length && !this.field[position];
     }
 
     getPlayer(playerIdx) {
         return this.players[playerIdx];
-    }*/
+    }
 
 }
 
@@ -139,9 +129,6 @@ let game = isPlayerOneFirst ? new JackalGame(playerOne, playerTwo) : new JackalG
 game.feee();
 
 const cells = document.querySelectorAll(".cell");
-const cellsImg = document.querySelectorAll("img");
-/*const cross = document.querySelector("#cross");
-const circle = document.querySelector("#circle");*/
 let flag = 0;
 /*
 let isOver = false;*/
@@ -149,9 +136,9 @@ let isOver = false;*/
 
 let myCells = Array.from(cells)
 /*const resetButton = document.querySelector("input.reset-button");
-const undoButton = document.querySelector("input.undo-button");
+const undoButton = document.querySelector("input.undo-button");*/
 const gameStatus = document.querySelector("#gameStatus");
-const playersNames = document.querySelector("#player-form");
+/*const playersNames = document.querySelector("#player-form");
 playersNames.addEventListener('submit', addPlayers);
 
 function addPlayers(event) {
@@ -175,22 +162,9 @@ function addPlayers(event) {
 
 resetButton.addEventListener('click', reset);
 undoButton.addEventListener('click', undo);
+*/
 
-function status() {
-
-    if (game.checkIsWin(flag % 2)) {
-        const winner = game.getPlayer((flag + 1) % 2).info === playerOne ? playerOne.name : playerTwo.name;
-        gameStatus.innerHTML = `Игрок ${winner} победил`;
-        isOver = true;
-    } else if (game.checkIsDraw()) {
-        gameStatus.innerHTML = "Ничья";
-        isOver = true;
-    } else if (!isOver) {
-        gameStatus.innerHTML = `Игрок ${game.getPlayer(flag % 2).info === playerOne ? playerOne.name : playerTwo.name}, твой ход`;
-    }
-}
-
-
+/*
 function reset() {
     gameTurns = [];
     for (let cell of cells) {
@@ -241,7 +215,11 @@ for (let cell of myCells) {
 
             }
 
-            /*status();
+
+            gameStatus.innerHTML = `Игрок ${game.getPlayer(flag % 2).info === playerOne ? playerOne.name : playerTwo.name}, твой ход`;
+
+            /*  status();*/
+            /*
             if (game.checkIsWin(flag % 2)) {
                 const winner = game.getPlayer((flag + 1) % 2).info === playerOne ? playerOne.name : playerTwo.name;
                 console.log(`Player ${winner} win`);
