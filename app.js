@@ -26,23 +26,44 @@ app.get('/', (req, res) => {
     res.render('game', {rando, io});
 });
 
-io.on('connection', (socket) => {
-    socket.on('connect', (data) => {
-        console.log(data);
+connections = [];
+
+io.sockets.on('connection', function(socket) {
+    console.log("Пользователь подключился");
+    // Добавление нового соединения в массив
+    connections.push(socket);
+
+    // Функция, которая срабатывает при отключении от сервера
+    socket.on('disconnect', function(data) {
+        // Удаления пользователя из массива
+        connections.splice(connections.indexOf(socket), 1);
+        console.log("Пользователь отключился");
     });
+
+    socket.on('typing', function(name) {
+        io.emit('typing', name);
+    })
+
+    // Функция получающая сообщение от какого-либо пользователя
+    socket.on('send mess', function(data) {
+        // Внутри функции мы передаем событие 'add mess',
+        // которое будет вызвано у всех пользователей и у них добавиться новое сообщение
+        io.sockets.emit('add mess', {mess: data.mess, name: data.name, className: data.className});
+    });
+
+});
+/*
+io.on('connection', (socket) => {
     socket.on('chat message', (msg) => {
         io.emit('chat message', msg);
     });
-    socket.on('disconnect', () => {
-        console.log('user disconnected');
-    });
 
-});
+});*/
 
 
-app.all('*', (req, res, next) => {
+/*app.all('*', (req, res, next) => {
     next(new ExpressError('Page not found', 404))
-});
+});*/
 
 /*app.use((err, req, res, next) => {
     const {statusCode = 500} = err;
