@@ -68,24 +68,27 @@ class JackalGame {
         return this.players[playerIdx].position;
     }
 
-
-    fillField() {
-        for (let i = 0; i < this.field.length; i++) {
-            for (let j = 0; j < this.field[i].length; j++) {
-
-                const rng = rando(Object.keys(this.cards).length - 1);
-                let key = Object.keys(this.cards)[rng];
-
-                if (this.field[i][j] !== 'sea') {
-                    if (this.cards[key] !== 0) {
-                        this.field[i][j] = key;
-                        this.cards[key] -= 1;
-
-                    } else j--;
-                }
-            }
+    allCards = []
+    getAllCards(){
+        for (let i = 0; i < 31; ++i){
+            let key = Object.keys(this.cards)[i];
+            for (let j = 0; j < this.cards[key]; ++j)
+                this.allCards.push(key);
         }
     }
+
+    fillField(){
+        for (let i = 0; i < this.field.length; i++)
+            for (let j = 0; j < this.field[i].length; j++) {
+                const rng = rando(this.allCards.length - 1);
+                if (this.field[i][j] !== 'sea' && this.field[i][j] !== 'ship') {
+                    this.field[i][j] = this.allCards[rng];
+                    this.allCards.splice(rng, 1);
+                }
+            }
+    }
+
+
 
 
     isPossibleMove(pos) {
@@ -186,6 +189,7 @@ const playerOne = {name: "Andrey"};
 const playerTwo = {name: "Ruslan"};
 
 let game = new JackalGame(playerOne, playerTwo);
+game.getAllCards();
 game.fillField();
 
 const cells = document.querySelectorAll(".cell");
