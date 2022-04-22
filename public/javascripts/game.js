@@ -1,6 +1,6 @@
 class JackalGame {
     field = [
-        ['sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea'],
+        ['sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'ship', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea'],
         ['sea', 'sea', null, null, null, null, null, null, null, null, null, 'sea', 'sea'],
         ['sea', null, null, null, null, null, null, null, null, null, null, null, 'sea'],
         ['sea', null, null, null, null, null, null, null, null, null, null, null, 'sea'],
@@ -12,7 +12,7 @@ class JackalGame {
         ['sea', null, null, null, null, null, null, null, null, null, null, null, 'sea'],
         ['sea', null, null, null, null, null, null, null, null, null, null, null, 'sea'],
         ['sea', 'sea', null, null, null, null, null, null, null, null, null, 'sea', 'sea'],
-        ['sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea']
+        ['sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'ship', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea']
     ];
 
     cards = {
@@ -69,6 +69,7 @@ class JackalGame {
     }
 
     allCards = []
+
     getAllCards(){
         for (let i = 0; i < 31; ++i){
             let key = Object.keys(this.cards)[i];
@@ -178,6 +179,28 @@ class JackalGame {
             }
     }
 
+    moveShipToRight(playerIdx) {
+        let cPos = this.players[playerIdx].position;
+        if (cPos[0] == 12 || cPos[0] == 0)
+            if (cPos[1] + 1 != 12){
+                this.field[cPos[0]][cPos[1]] = "sea";
+                cPos[1] += 1;
+                this.field[cPos[0]][cPos[1]] = "ship";
+                this.players[playerIdx].position = cPos;
+            }
+    }
+
+    moveShipToLeft(playerIdx) {
+        let cPos = this.players[playerIdx].position;
+        if (cPos[0] == 12 || cPos[0] == 0)
+            if (cPos[1] - 1 != 0){
+                this.field[cPos[0]][cPos[1]] = "sea";
+                cPos[1] -= 1;
+                this.field[cPos[0]][cPos[1]] = "ship";
+                this.players[playerIdx].position = cPos;
+            }
+    }
+
     getPlayer(playerIdx) {
         return this.players[playerIdx];
     }
@@ -205,7 +228,7 @@ for (let cell of myCells) {
     cell.onclick = () => {
         try {
             flag++;
-            if (newArray[myCells.indexOf(cell)] !== 'sea') {
+            if (newArray[myCells.indexOf(cell)] !== 'sea' && newArray[myCells.indexOf(cell)] !== 'ship') {
                 if (flag % 2) {
                     cell.innerHTML = "";
                     const newImg = document.createElement('img');

@@ -65,7 +65,7 @@ $(function () {
             $all_messages.empty();
             let mess = $('<b>' + name + '</b> <span>печатает сообщение...</span>');
             $all_messages.last().append(mess);
-            mess.fadeOut(3000, function() {$(this).remove()});
+            mess.fadeOut('slow');
         }
     })
 });
