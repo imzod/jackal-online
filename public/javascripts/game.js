@@ -81,9 +81,7 @@ class JackalGame {
                         this.field[i][j] = key;
                         this.cards[key] -= 1;
 
-                    } else {
-                        j--;
-                    }
+                    } else j--;
                 }
             }
         }
