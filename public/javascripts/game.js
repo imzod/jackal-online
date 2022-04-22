@@ -208,13 +208,13 @@ for (let cell of myCells) {
                     cell.innerHTML = "";
                     const newImg = document.createElement('img');
                     newImg.classList.add("img-fluid-custom", "border-custom", "border-dark");
-                    newImg.src = `/imgs/${newArray[myCells.indexOf(cell)]}.jpg`
+                    newImg.src = `/imgs/${newArray[myCells.indexOf(cell)]}.png`
                     cell.append(newImg);
                 } else {
                     cell.innerHTML = "";
                     const newImg = document.createElement('img');
                     newImg.classList.add("img-fluid-custom", "border-custom", "border-dark");
-                    newImg.src = `/imgs/${newArray[myCells.indexOf(cell)]}.jpg`
+                    newImg.src = `/imgs/${newArray[myCells.indexOf(cell)]}.png`
                     cell.append(newImg);
                 }
             }
