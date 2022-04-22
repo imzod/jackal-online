@@ -14,6 +14,7 @@ class JackalGame {
         ['sea', 'sea', null, null, null, null, null, null, null, null, null, 'sea', 'sea'],
         ['sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea']
     ];
+
     cards = {
         empty1: 10,
         empty2: 10,
@@ -49,25 +50,39 @@ class JackalGame {
         sea: 0
     }
 
-    getRandomNum(min, max) {
-        return Math.floor(Math.random() * (max - min) + min);
+    players = [];
+
+
+    position = [];
+
+    constructor(playerOneInfo, playerTwoInfo) {
+        this.players = [
+            {info: playerOneInfo, symbol: "X"},
+            {info: playerTwoInfo, symbol: "O"}
+        ];
+        this.players[0].position = [0, 6]
+        this.players[1].position = [12, 6]
     }
 
-    newArray = this.field.flat()
+    getPosition(playerIdx) {
+        return this.players[playerIdx].position;
+    }
 
-    feee() {
+
+    fillField() {
         for (let i = 0; i < this.field.length; i++) {
-            for (let j = 0; j < (this.field)[i].length; j++) {
-                const randomNum = rando(0, Object.keys(this.cards).length - 1);
-                let key = Object.keys(this.cards)[randomNum];
+            for (let j = 0; j < this.field[i].length; j++) {
+
+                const rng = rando(Object.keys(this.cards).length - 1);
+                let key = Object.keys(this.cards)[rng];
+
                 if (this.field[i][j] !== 'sea') {
-                    if ((this.cards)[key] !== 0) {
-                        (this.field)[i][j] = key;
-                        (this.cards)[key] -= 1;
+                    if (this.cards[key] !== 0) {
+                        this.field[i][j] = key;
+                        this.cards[key] -= 1;
 
                     } else {
                         j--;
-                        console.log('aaaaaaaaaa')
                     }
                 }
             }
@@ -75,44 +90,91 @@ class JackalGame {
     }
 
 
-    players = [];
-
-    constructor(playerOneInfo, playerTwoInfo) {
-        this.players = [
-            {info: playerOneInfo, symbol: "X"},
-            {info: playerTwoInfo, symbol: "O"}
-        ];
+    isPossibleMove(pos) {
+        let flag = false;
+        for (let x = pos[0] - 1; x <= pos[0] + 1; ++x)
+            for (let y = pos[1] - 1; y <= pos[1] + 1; ++y)
+                if (x >= 0 && y >= 0 && x < this.field[0].length && y < this.field[1].length) {
+                    if (this.field[x][y] !== "sea")
+                        return true;
+                }
+        return flag;
     }
 
-    /*checkIsWin(playerIdx) {
-        for (const winPosition of TicTacToe.winPositions) {
-            let isWin = true;
-
-            for (const cell of winPosition) {
-                isWin = isWin && this.field[cell] === this.players[playerIdx].symbol;
+    moveToUp(playerIdx) {
+        let cPos = this.players[playerIdx].position;
+        if (cPos[0] - 1 > 0)
+            if (this.field[cPos[0] - 1][cPos[1]] !== "sea") {
+                cPos[0] -= 1;
+                this.players[playerIdx].position = cPos;
             }
+    }
 
-            if (isWin) {
-                winPosition.forEach(winCell => {
-                    cells[winCell].classList.add("winPosition");
-                });
-                console.log(winPosition)
-                return true;
+    moveToDown(playerIdx) {
+        let cPos = this.players[playerIdx].position;
+        if (cPos[0] + 1 < this.field[0].length)
+            if (this.field[cPos[0] + 1][cPos[1]] !== "sea") {
+                cPos[0] += 1;
+                this.players[playerIdx].position = cPos;
             }
-        }
-        return false;
     }
 
-    makeMove(playerIdx, position) {
-        if (!this.isPossibleMove(position)) {
-            throw new Error("Illegal move");
-        }
-
-        this.field[position] = this.players[playerIdx].symbol;
+    moveToRigth(playerIdx) {
+        let cPos = this.players[playerIdx].position;
+        if (cPos[1] + 1 < this.field[1].length)
+            if (this.field[cPos[0]][cPos[1] + 1] !== "sea") {
+                cPos[1] += 1;
+                this.players[playerIdx].position = cPos;
+            }
     }
-*/
-    isPossibleMove(position) {
-        return position < this.field.length && !this.field[position];
+
+    moveToLeft(playerIdx) {
+        let cPos = this.players[playerIdx].position;
+        if (cPos[1] - 1 > 0)
+            if (this.field[cPos[0]][cPos[1] - 1] !== "sea") {
+                cPos[1] -= 1;
+                this.players[playerIdx].position = cPos;
+            }
+    }
+
+    moveToLeftUp(playerIdx) {
+        let cPos = this.players[playerIdx].position;
+        if (cPos[1] - 1 > 0 && cPos[0] - 1 > 0)
+            if (this.field[cPos[0] - 1][cPos[1] - 1] !== "sea") {
+                cPos[0] -= 1;
+                cPos[1] -= 1;
+                this.players[playerIdx].position = cPos;
+            }
+    }
+
+    moveToRightUp(playerIdx) {
+        let cPos = this.players[playerIdx].position;
+        if (cPos[1] + 1 < this.field[1].length && cPos[0] - 1 > 0)
+            if (this.field[cPos[0] - 1][cPos[1] + 1] !== "sea") {
+                cPos[0] -= 1;
+                cPos[1] += 1;
+                this.players[playerIdx].position = cPos;
+            }
+    }
+
+    moveToLeftDown(playerIdx) {
+        let cPos = this.players[playerIdx].position;
+        if (cPos[1] - 1 > 0 && cPos[0] + 1 < this.field[0].length)
+            if (this.field[cPos[0] + 1][cPos[1] - 1] !== "sea") {
+                cPos[0] += 1;
+                cPos[1] -= 1;
+                this.players[playerIdx].position = cPos;
+            }
+    }
+
+    moveToRightDown(playerIdx) {
+        let cPos = this.players[playerIdx].position;
+        if (cPos[1] + 1 < this.field[1].length && cPos[0] + 1 < this.field[0].length)
+            if (this.field[cPos[0] + 1][cPos[1] + 1] !== "sea") {
+                cPos[0] += 1;
+                cPos[1] += 1;
+                this.players[playerIdx].position = cPos;
+            }
     }
 
     getPlayer(playerIdx) {
@@ -125,107 +187,41 @@ const isPlayerOneFirst = true;
 const playerOne = {name: "Andrey"};
 const playerTwo = {name: "Ruslan"};
 
-let game = isPlayerOneFirst ? new JackalGame(playerOne, playerTwo) : new JackalGame(playerTwo, playerOne);
-game.feee();
+let game = new JackalGame(playerOne, playerTwo);
+game.fillField();
 
 const cells = document.querySelectorAll(".cell");
 let flag = 0;
-/*
-let isOver = false;*/
 
 
 let myCells = Array.from(cells)
-/*const resetButton = document.querySelector("input.reset-button");
-const undoButton = document.querySelector("input.undo-button");*/
 const gameStatus = document.querySelector("#gameStatus");
-/*const playersNames = document.querySelector("#player-form");
-playersNames.addEventListener('submit', addPlayers);
 
-function addPlayers(event) {
-    event.preventDefault();
-
-    if (this.player1.value === '' || this.player2.value === '') {
-        alert('Введите имена игроков');
-        return;
-    }
-
-    const playerFormContainer = document.querySelector('.enter-players');
-    const gameBoard = document.querySelector('#game-board');
-    playerFormContainer.classList.add('hide-container');
-    gameBoard.classList.remove('hide-container');
-
-    playerOne.name = this.player1.value;
-    playerTwo.name = this.player2.value;
-    gameStatus.innerHTML = `Игрок ${game.getPlayer(flag % 2).info === playerOne ? playerOne.name : playerTwo.name}, твой ход`;
-    console.dir(this.player1)
-}
-
-resetButton.addEventListener('click', reset);
-undoButton.addEventListener('click', undo);
-*/
-
-/*
-function reset() {
-    gameTurns = [];
-    for (let cell of cells) {
-        cell.innerHTML = '';
-    }
-    game = isPlayerOneFirst ? new TicTacToe(playerOne, playerTwo) : new TicTacToe(playerTwo, playerOne);
-    flag = 0;
-    isOver = false;
-    for (let cell of cells) {
-        cell.classList.remove("winPosition");
-    }
-    gameStatus.innerHTML = "";
-    status();
-}
-
-function undo() {
-    let undoPop = gameTurns.pop();
-    game.field[undoPop] = null;
-    myCells[undoPop].innerHTML = '';
-    flag--;
-    isOver = false;
-    for (let cell of cells) {
-        cell.classList.remove("winPosition");
-    }
-    gameStatus.innerHTML = "";
-    status();
-}*/
 let newArray = game.field.flat()
 
 for (let cell of myCells) {
     cell.onclick = () => {
         try {
             flag++;
-            if (flag % 2) {
-                cell.innerHTML = "";
-                const newImg = document.createElement('img');
-                newImg.classList.add("img-fluid");
-                newImg.src = `/imgs/${newArray[myCells.indexOf(cell)]}.jpg`
-                cell.append(newImg);
-                console.log(newArray[myCells.indexOf(cell)]);
-            } else {
-                cell.innerHTML = "";
-                const newImg = document.createElement('img');
-                newImg.classList.add("img-fluid");
-                newImg.src = `/imgs/${newArray[myCells.indexOf(cell)]}.jpg`
-                cell.append(newImg);
-                console.log();
-
+            if (newArray[myCells.indexOf(cell)] !== 'sea') {
+                if (flag % 2) {
+                    cell.innerHTML = "";
+                    const newImg = document.createElement('img');
+                    newImg.classList.add("img-fluid-custom", "border-custom", "border-dark");
+                    newImg.src = `/imgs/${newArray[myCells.indexOf(cell)]}.jpg`
+                    cell.append(newImg);
+                } else {
+                    cell.innerHTML = "";
+                    const newImg = document.createElement('img');
+                    newImg.classList.add("img-fluid-custom", "border-custom", "border-dark");
+                    newImg.src = `/imgs/${newArray[myCells.indexOf(cell)]}.jpg`
+                    cell.append(newImg);
+                }
             }
+            console.log(newArray[myCells.indexOf(cell)]);
 
 
             gameStatus.innerHTML = `Игрок ${game.getPlayer(flag % 2).info === playerOne ? playerOne.name : playerTwo.name}, твой ход`;
-
-            /*  status();*/
-            /*
-            if (game.checkIsWin(flag % 2)) {
-                const winner = game.getPlayer((flag + 1) % 2).info === playerOne ? playerOne.name : playerTwo.name;
-                console.log(`Player ${winner} win`);
-                isOver = true;
-            }
-*/
 
         } catch
             (exc) {
@@ -238,72 +234,3 @@ for (let cell of myCells) {
 
     }
 }
-/*
-
-let field = [
-    [null, null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null, null],
-];
-let cards = {
-    empty1: 10,
-    empty2: 10,
-    empty3: 10,
-    empty4: 10,
-    double: 6,
-    arrow1sideStraightRight: 3,
-    arrow1sideRightUp: 3,
-    arrow1sideLeftRight: 3,
-    arrow2sidesDiagonal: 3,
-    arrow3sides: 3,
-    arrow4sidesLeftRight: 3,
-    arrow4sidesDiagonal: 3,
-    trap: 3,
-    trap2: 5,
-    trap3: 4,
-    trap4: 2,
-    trap5: 1,
-    rum: 4,
-    animal: 4,
-    parachute: 2,
-    canon: 2,
-    gold1: 5,
-    gold2: 5,
-    gold3: 3,
-    gold4: 2,
-    gold5: 1,
-    horse: 2,
-    safeZone: 2,
-    resurrection: 1,
-    airplane: 1,
-    dead: 1
-}
-
-function getRandomNum(min, max) {
-    return Math.floor(Math.random() * (max - min) + min);
-}
-
-
-    for (let i = 0; i < field.length; i++) {
-        for (let j = 0; j < field[i].length; j++) {
-            const randomNum = rando(0, Object.keys(cards).length-1);
-            let key = Object.keys(cards)[randomNum];
-            if (cards[key] !== 0) {
-                field[i][j] = key;
-                cards[key] -= 1;
-            } else {
-                j--;
-                console.log('aaaaaaaaaa')
-            }
-
-        }
-    }
-console.log (field);*/
