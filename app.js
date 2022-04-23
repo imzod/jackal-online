@@ -60,24 +60,6 @@ io.sockets.on('connection', function (socket) {
     }
     socket.emit('generate field', JSON.stringify(field.field));
 });
-/*
-io.on('connection', (socket) => {
-    socket.on('chat message', (msg) => {
-        io.emit('chat message', msg);
-    });
-
-});*/
-
-
-/*app.all('*', (req, res, next) => {
-    next(new ExpressError('Page not found', 404))
-});*/
-
-/*app.use((err, req, res, next) => {
-    const {statusCode = 500} = err;
-    if (!err.message) err.message = 'Oh no, ERROR!!';
-    res.status(statusCode).render('error', {err});
-})*/
 
 const port = process.env.PORT || 3000;
 server.listen(port, () => {
