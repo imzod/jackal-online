@@ -21,24 +21,6 @@ function generate(map) {
     for (let cell of myCells) {
         cell.onclick = () => {
             try {
-                flag++;
-                if (newArray[myCells.indexOf(cell)] !== 'sea' && newArray[myCells.indexOf(cell)] !== 'ship') {
-                    if (flag % 2) {
-                        cell.innerHTML = "";
-                        const newImg = document.createElement('img');
-                        newImg.classList.add("img-fluid-custom", "border-custom", "border-dark");
-                        newImg.src = `/imgs/${newArray[myCells.indexOf(cell)]}.png`
-                        cell.append(newImg);
-                    } else {
-                        cell.innerHTML = "";
-                        const newImg = document.createElement('img');
-                        newImg.classList.add("img-fluid-custom", "border-custom", "border-dark");
-                        newImg.src = `/imgs/${newArray[myCells.indexOf(cell)]}.png`
-                        cell.append(newImg);
-                    }
-                }
-                console.log(newArray[myCells.indexOf(cell)]);
-
                 socket.emit('open cell', {
                     index: myCells.indexOf(cell)
                 });
