@@ -184,4 +184,4 @@ class JackalGame {
 
 }
 
-module.exports = JackalGame;
+export default JackalGame;
