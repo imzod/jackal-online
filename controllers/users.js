@@ -40,10 +40,6 @@ module.exports.login = (req, res, next) => {
                 if (err) {
                     handleResponse(res, 500, err);
                 }
-                const redirectUrl = req.session.returnTo || '/';
-                res.redirect(redirectUrl);
-                delete req.session.returnTo;
-                handleResponse(res, 200, 'success');
             });
         }
     })(req, res, next);
