@@ -1,4 +1,4 @@
-const {rando, randoSequence} = require('@nastyox/rando.js');
+const {rando} = require('@nastyox/rando.js');
 class JackalGame {
     field = [
         ['sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'ship', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea'],
@@ -239,6 +239,8 @@ class JackalGame {
         return this.players[playerIdx];
     }
 }
+
+// Функция для начала игры, которая возвращает объект игры
 exports.startGame =  function (req, res) {
     const playerOne = {name: "Andrey"};
     const playerTwo = {name: "Ruslan"};
