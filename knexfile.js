@@ -9,10 +9,10 @@ module.exports = {
   development: {
     client: 'postgresql',
     connection: {
-      database: 'jackal',
-      user: 'imzod',
-      password: '859694',
-      host: 'localhost',
+      database: 'bbjwwkfl',
+      user: 'bbjwwkfl',
+      password: 'XenQZvlfBP3Y2wI7GkeN6JYQCSiyRbcN',
+      host: 'tiny.db.elephantsql.com',
       port: 5432,
     },
     migrations: {
