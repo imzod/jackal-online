@@ -9,11 +9,12 @@ module.exports = {
   development: {
     client: 'postgresql',
     connection: {
-      database: 'bbjwwkfl',
-      user: 'bbjwwkfl',
-      password: 'XenQZvlfBP3Y2wI7GkeN6JYQCSiyRbcN',
-      host: 'tiny.db.elephantsql.com',
+      database: 'depoj3vtsmujsd',
+      user: 'mwzjjimxsiqiqs',
+      password: '04000fb9e8e50128d1972cda62ab3e37d9679c049ee58ba2c6b9242352894a9b',
+      host: 'ec2-52-3-200-138.compute-1.amazonaws.com',
       port: 5432,
+      ssl: { rejectUnauthorized: false }
     },
     migrations: {
       directory: __dirname + '/db/migrations',

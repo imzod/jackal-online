@@ -40,7 +40,7 @@ module.exports.login = (req, res, next) => {
                 if (err) {
                     handleResponse(res, 500, err);
                 }
-                handleResponse(res, 200, 'success');
+                res.redirect('/');
             });
         }
     })(req, res, next);

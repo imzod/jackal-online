@@ -50,7 +50,11 @@ app.use(session({
         saveUninitialized: true,
         resave: false,
         store,
-        cookie: {maxAge: 30 * 24 * 60 * 60 * 1000}
+        cookie: {
+            httpOnly: true,
+            expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+            maxAge: 1000 * 60 * 60 * 24 * 7
+        }
     })
 )
 app.use(passport.initialize());
@@ -74,12 +78,14 @@ app.use('/', (req, res) => {
     res.end(`${n} views`);
 });*/
 
+
+
+app.use('/', authRouter);
+
 app.get('/', authHelpers.loginRequired, (req, res) => {
     gameController.startGame(req, res)
     res.render('game', {rando, io});
 });
-
-app.use('/', authRouter);
 
 
 
