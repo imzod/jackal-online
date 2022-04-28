@@ -84,7 +84,7 @@ app.use('/', authRouter);
 
 app.get('/', authHelpers.loginRequired, (req, res) => {
     gameController.startGame(req, res)
-    res.render('game', {rando, io});
+    res.render('game', {rando, io, user: req.user})
 });
 
 
