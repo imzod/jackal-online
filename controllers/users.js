@@ -61,6 +61,7 @@ module.exports.login = (req, res, next) => {
 // Выход из аккаунта
 module.exports.logout = (req, res) => {
     req.logout();
+    req.flash("success", "До свидания!");
     res.redirect('/login');
 };
 
