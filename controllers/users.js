@@ -12,12 +12,17 @@ module.exports.register = async (req, res, next) => {
         .then((response) => {
             passport.authenticate('local', (err, user, info) => {
                 if (user) {
-                    handleResponse(res, 200, 'success');
+                    req.logIn(user, function (err) {
+                        return err
+                            ? next(err)
+                            : res.redirect('/');
+                    });
                 }
             })(req, res, next);
         })
         .catch((err) => {
-            handleResponse(res, 500, err.detail);
+            req.flash("error", err.detail);
+            res.redirect("/register");
         });
 };
 
@@ -30,17 +35,23 @@ module.exports.renderLogin = (req, res) => {
 module.exports.login = (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
         if (err) {
-            handleResponse(res, 500, err);
+            req.flash("error", err);
+            res.redirect('/login');
         }
         if (!user) {
-            handleResponse(res, 404, 'User not found');
+            req.flash("error", 'User not found');
+            res.redirect('/login');
         }
         if (user) {
             req.logIn(user, function (err) {
                 if (err) {
-                    handleResponse(res, 500, err);
+                    req.flash("error", err);
+                    res.redirect('/login');
                 }
-                res.redirect('/');
+                req.flash("success", "Welcome to the game!")
+                const redirectUrl = req.session.returnTo || '/';
+                delete req.session.returnTo;
+                res.redirect(redirectUrl);
             });
         }
     })(req, res, next);
@@ -50,7 +61,7 @@ module.exports.login = (req, res, next) => {
 // Выход из аккаунта
 module.exports.logout = (req, res) => {
     req.logout();
-    handleResponse(res, 200, 'success');
+    res.redirect('/login');
 };
 
 

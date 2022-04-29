@@ -106,7 +106,7 @@ class JackalGame {
 
     allCards = []
 
-    getAllCards() {
+    /*getAllCards() {
         for (let i = 0; i < 31; ++i) {
             let key = Object.keys(this.cardsCount)[i];
             for (let j = 0; j < this.cardsCount[key]; ++j)
@@ -123,8 +123,27 @@ class JackalGame {
                     this.allCards.splice(rng, 1);
                 }
             }
+    }*/
+    getAllCards() {
+        for (let i = 0; i < 31; ++i) {
+            let key = Object.keys(this.cardsCount)[i];
+            let value = Object.values(this.cards)[i];
+            for (let j = 0; j < this.cardsCount[key]; ++j)
+                this.allCards.push(value);
+        }
     }
 
+
+    fillField() {
+        for (let i = 0; i < this.field.length; i++)
+            for (let j = 0; j < this.field[i].length; j++) {
+                const rng = rando(this.allCards.length - 1);
+                if (this.field[i][j] !== 'sea' && this.field[i][j] !== 'ship') {
+                    this.field[i][j] = this.allCards[rng];
+                    this.allCards.splice(rng, 1);
+                }
+            }
+    }
 
     isPossibleMove(pos) {
         let flag = false;

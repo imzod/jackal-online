@@ -13,8 +13,9 @@ function generate(map) {
             cell.innerHTML = "";
             const newImg = document.createElement('img');
             newImg.classList.add("img-fluid-custom", "border-custom", "border-dark");
-            newImg.src = `/imgs/${newArray[myCells.indexOf(cell)]}.png`
+            newImg.src = `/imgs/${newArray[myCells.indexOf(cell)].name}.png`
             cell.append(newImg);
+            console.log(newArray[myCells.indexOf(cell)].name)
         }
     })
 

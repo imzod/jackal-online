@@ -7,7 +7,7 @@ const {rando} = require('@nastyox/rando.js');
 const http = require('http');
 
 
-const flash = require('express-flash');
+const flash = require('connect-flash');
 const session = require('express-session');
 const KnexSessionStore = require('connect-session-knex')(session);
 
@@ -83,6 +83,7 @@ app.use('/', (req, res) => {
 app.use('/', authRouter);
 
 app.get('/', authHelpers.loginRequired, (req, res) => {
+
     gameController.startGame(req, res)
     res.render('game', {rando, io, user: req.user})
 });
@@ -91,7 +92,7 @@ app.get('/', authHelpers.loginRequired, (req, res) => {
 
 
 connections = [];
-let field = null;
+let game = null;
 
 io.sockets.on('connection', function (socket) {
     console.log("Пользователь подключился");
@@ -119,10 +120,10 @@ io.sockets.on('connection', function (socket) {
     socket.on('open cell', function (data) {
         io.sockets.emit('open cell', {index: data.index});
     });
-    if (field === null) {
-        field = gameController.startGame()
+    if (game === null) {
+        game = gameController.startGame()
     }
-    socket.emit('generate field', JSON.stringify(field.field));
+    socket.emit('generate field', JSON.stringify(game.field));
 });
 
 const port = process.env.PORT || 3000;

@@ -22,7 +22,8 @@ function createUser(req, res) {
                 })
                 .returning('*');
         }).catch((err) => {
-            res.status(400).json({status: err.message});
+            req.flash("error", err.message);
+            res.redirect('/register');
         });
 }
 
@@ -41,11 +42,16 @@ function adminRequired(req, res, next) {
     if (!req.user) res.status(401).json({status: 'Please log in'});
     return knex('users').where({username: req.user.username}).first()
         .then((user) => {
-            if (!user.admin) res.status(401).json({status: 'You are not authorized'});
+            if (!user.admin) {
+                res.status(401).json({status: 'You are not authorized'})
+                req.flash("error", 'You are not authorized');
+                res.redirect('/');
+            }
             return next();
         })
         .catch((err) => {
-            res.status(500).json({status: 'Something bad happened'});
+            req.flash("error", 'Something bad happened');
+            res.redirect('/');
         });
 }
 
@@ -53,8 +59,9 @@ function adminRequired(req, res, next) {
 function loginRedirect(req, res, next) {
     req.flash('success', 'Welcome back!');
     const redirectUrl = req.session.returnTo || '/';
-    res.redirect(redirectUrl);
     delete req.session.returnTo;
+    res.redirect(redirectUrl);
+
 }
 
 
