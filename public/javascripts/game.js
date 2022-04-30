@@ -7,6 +7,16 @@ function generate(map) {
 
     let newArray = map.flat()
 
+    let sessionCells = JSON.parse(sessionStorage.getItem('cells') || '[]');
+    for (let sessionCell of sessionCells) {
+        const cell = myCells[sessionCell];
+        cell.innerHTML = "";
+        const newImg = document.createElement('img');
+        newImg.classList.add("img-fluid-custom", "border-custom", "border-dark");
+        newImg.src = `/imgs/${newArray[myCells.indexOf(cell)].name}.png`
+        cell.append(newImg);
+    }
+
     socket.on('open cell', function (data) {
         const cell = myCells[data.index];
         if (newArray[myCells.indexOf(cell)] !== 'sea' && newArray[myCells.indexOf(cell)] !== 'ship') {
@@ -16,6 +26,9 @@ function generate(map) {
             newImg.src = `/imgs/${newArray[myCells.indexOf(cell)].name}.png`
             cell.append(newImg);
             console.log(newArray[myCells.indexOf(cell)].name)
+            let sessionCells = JSON.parse(sessionStorage.getItem('cells') || '[]');
+            sessionCells.push(data.index);
+            sessionStorage.setItem('cells', JSON.stringify(sessionCells));
         }
     })
 

@@ -23,27 +23,45 @@ switch (random) {
         alertClass = 'light';
         break;
 }
+
+const sessionColor = sessionStorage.getItem('color');
+if (sessionColor) {
+    alertClass = sessionColor;
+} else {
+    sessionStorage.setItem('color', alertClass);
+}
+
 let socket = null;
 
-$(function () {
-    socket = io.connect();
+$(async function () {
 
 
     let $form = $("#messForm");
-    let $name = $("#name");
+
+    let response = await fetch('/me');
+    let user = await response.json();
+
+    socket = io.connect();
+
+    //let $name = $("#name");
     let $message = $("#message");
     let $typing = $("#typing");
     let $chat = $(".chat");
 
+    let allMessages = JSON.parse(sessionStorage.getItem('messages') || '[]');
+    for (let message of allMessages) {
+        $typing.before("<div class='alert alert-" + message.className + "'><b>" + message.name + "</b>: " + message.mess + "</div>");
+    }
+    $chat.animate({scrollTop: $typing.offset().top}, 'slow');
 
     $form.submit(function (event) {
         event.preventDefault();
-        socket.emit('send mess', {mess: $message.val(), name: $name.val(), className: alertClass});
+        socket.emit('send mess', {mess: $message.val(), name: user.username, className: alertClass});
         $message.val('');
     });
 
     $($message).on('keydown keyup', function () {
-        socket.emit('typing', $name.val());
+        socket.emit('typing', user.username);
     });
 
 
@@ -51,11 +69,14 @@ $(function () {
 
         $typing.before("<div class='alert alert-" + data.className + "'><b>" + data.name + "</b>: " + data.mess + "</div>");
         $chat.animate({scrollTop: $typing.offset().top}, 'slow');
+        let allMessages = JSON.parse(sessionStorage.getItem('messages') || '[]');
+        allMessages.push(data);
+        sessionStorage.setItem('messages', JSON.stringify(allMessages));
 
     });
 
     socket.on('typing', function (name) {
-        if (name !== $name.val()) {
+        if (name !== user.username) {
             $typing.empty();
             let mess = $('<b>' + name + '</b> <span>печатает сообщение...</span>');
             $typing.append(mess);
@@ -66,4 +87,5 @@ $(function () {
     socket.on('generate field', function (field) {
         generate(JSON.parse(field));
     })
+
 });

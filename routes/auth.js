@@ -61,6 +61,11 @@ router.get('/admin', authHelpers.adminRequired, (req, res, next)  => {
     handleResponse(res, 200, 'success');
 });
 
+router.get('/me', (req, res, next)  => {
+
+    res.status(200).json({id: req.user.id, username: req.user.username, firstname: req.user.firstname});
+});
+
 
 function handleResponse(res, code, statusMsg) {
     res.status(code).json({status: statusMsg});
