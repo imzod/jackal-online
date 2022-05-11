@@ -12,7 +12,6 @@ const session = require('express-session');
 const KnexSessionStore = require('connect-session-knex')(session);
 
 
-
 const jwt = require("jsonwebtoken")
 const SECRET = "passw0rd"
 
@@ -70,14 +69,12 @@ app.use((req, res, next) => {
 })
 
 
-
 /*
 app.use('/', (req, res) => {
     const n = req.session.views || 0;
     req.session.views = n + 1;
     res.end(`${n} views`);
 });*/
-
 
 
 app.use('/', authRouter);
@@ -89,36 +86,56 @@ app.get('/', authHelpers.loginRequired, (req, res) => {
 });
 
 
-
-
 connections = [];
+games = {game: []};
 let game = null;
 
+
+
 io.sockets.on('connection', function (socket) {
-    console.log("Пользователь подключился");
+    if (games.game.length === 2) {
+        socket.disconnect()
+        return
+    }
+    socket.join('game')
+    games.game.push(socket);
+
+    socket.on('new user', function (data) {
+        socket.to("game").emit('user connected', data);
+        socket.username = data;
+        console.log("Пользователь подключился", socket.username);
+    })
+
+    socket.on("disconnecting", () => {
+        socket.to("game").emit('user disconnected', socket.username);
+        games.game.splice(games.game.indexOf(socket), 1);
+    });
+
+
+    //console.log("Пользователь подключился", socket.username);
 
     // Добавление нового соединения в массив
     connections.push(socket);
-
+    console.log(connections.length)
     // Функция, которая срабатывает при отключении от сервера
     socket.on('disconnect', function (data) {
         // Удаления пользователя из массива
         connections.splice(connections.indexOf(socket), 1);
-        console.log("Пользователь отключился");
+        console.log("Пользователь отключился", socket.username);
     });
 
     socket.on('typing', function (name) {
-        io.emit('typing', name);
+        socket.to("game").emit('typing', name);
     })
 
     // Функция получающая сообщение от какого-либо пользователя
     socket.on('send mess', function (data) {
         // Внутри функции мы передаем событие 'add mess',
         // которое будет вызвано у всех пользователей и у них добавиться новое сообщение
-        io.sockets.emit('add mess', {mess: data.mess, name: data.name, className: data.className});
+        io.sockets.to("game").emit('add mess', {mess: data.mess, name: data.name, className: data.className});
     });
     socket.on('open cell', function (data) {
-        io.sockets.emit('open cell', {index: data.index});
+        io.sockets.to("game").emit('open cell', {index: data.index});
     });
     if (game === null) {
         game = gameController.startGame()

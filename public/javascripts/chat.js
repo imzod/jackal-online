@@ -48,11 +48,13 @@ $(async function () {
     let $typing = $("#typing");
     let $chat = $(".chat");
 
+
     let allMessages = JSON.parse(sessionStorage.getItem('messages') || '[]');
     for (let message of allMessages) {
         $typing.before("<div class='alert alert-" + message.className + "'><b>" + message.name + "</b>: " + message.mess + "</div>");
     }
     $chat.animate({scrollTop: $typing.offset().top}, 'slow');
+
 
     $form.submit(function (event) {
         event.preventDefault();
@@ -60,7 +62,7 @@ $(async function () {
         $message.val('');
     });
 
-    $($message).on('keydown keyup', function () {
+    $message.on('keydown keyup', function () {
         socket.emit('typing', user.username);
     });
 
@@ -74,14 +76,28 @@ $(async function () {
         sessionStorage.setItem('messages', JSON.stringify(allMessages));
 
     });
+    socket.on('connect', function () {
+        socket.emit('new user', user.username);
+    });
+
+    socket.on('user connected', function (data) {
+        $typing.before(`<div><b>${data}</b> подключился</div>`);
+        $chat.animate({scrollTop: $typing.offset().top}, 'slow');
+    });
+
+    socket.on('user disconnected', function (data) {
+        $typing.before(`<div><b>${data}</b> отключился</div>`);
+        $chat.animate({scrollTop: $typing.offset().top}, 'slow');
+    });
 
     socket.on('typing', function (name) {
-        if (name !== user.username) {
-            $typing.empty();
-            let mess = $('<b>' + name + '</b> <span>печатает сообщение...</span>');
-            $typing.append(mess);
-            mess.fadeOut('slow');
-        }
+
+        $typing.empty();
+        let mess = $('<b>' + name + '</b> <span>печатает сообщение...</span>');
+        $typing.append(mess);
+        $chat.animate({scrollTop: $typing.offset().top}, 'slow');
+        mess.fadeOut('slow');
+
     })
 
     socket.on('generate field', function (field) {

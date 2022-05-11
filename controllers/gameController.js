@@ -16,6 +16,8 @@ class JackalGame {
         ['sea', 'sea', 'sea', 'sea', 'sea', 'sea', 'ship', 'sea', 'sea', 'sea', 'sea', 'sea', 'sea']
     ];
 
+
+
     cardsCount = {
         empty1: 10,
         empty2: 10,
